@@ -23,3 +23,11 @@ For production we strongly advise using pm2 to supervise and keep the applicatio
 ```
 pm2 start index.js --name cartracking --exp-backoff-restart-delay=100
 ```
+
+
+Available topics:
+/topic/producers/cars/{company}/{id}
+
+Example:
+/topic/producers.cars.data.avis.*
+/topic/producers.cars.data.*.39
