@@ -54,7 +54,7 @@ class MessageProducer {
 
     sendMessage(path, messageToPublish) {
         if (this.stompClient) {
-            const correctedPath = this.createPath(path)
+            const correctedPath = this.createPath(path);
             this.stompClient.send(correctedPath, {}, JSON.stringify(messageToPublish));
         }
     };

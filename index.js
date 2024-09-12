@@ -78,14 +78,14 @@ class TracksEmitter {
 // Samples were tested using our broker at: leu-gsp-vrndp06.ingrnet.com
 
 const mqttBroker = new MessageProducerMQTT({
-    relayhost: "leu-gsp-vrndp06.ingrnet.com", //  URL of your Broker (ActiveMQ, RabbitMQ or any other MQTT compliant Broker)
+    relayhost: "localhost", //  URL of your Broker (ActiveMQ, RabbitMQ or any other MQTT compliant Broker)
     port: "1883",  //  Port of your Broker, in most cases 1883 for http and 8883 for SSL
     username: "admin",  //  A valid user defined in your Broker capable to send messages  (see your Broker user guide to create the user)
     password: "admin",  // Passsword for the user
 });
 
 const stompBroker = new MessageProducer({
-    relayhost: "leu-gsp-vrndp06.ingrnet.com",  //  URL of your Broker (ActiveMQ, RabbitMQ or any other STOMP compliant Broker)
+    relayhost: "localhost",  //  URL of your Broker (ActiveMQ, RabbitMQ or any other STOMP compliant Broker)
     port: "61613",           //  Port of your Broker, in most cases 61613 for http and 61612 for SSL
     username: "admin",   //  A valid user defined in your Broker capable to send to /topic/  (see your Broker user guide to create the user)
     password: "admin",   //  Passsword for the user
@@ -95,7 +95,7 @@ const stompBroker = new MessageProducer({
 const trackEmitter = new TracksEmitter({
     // Select your prefered protocol
     broker: stompBroker
-   // broker: mqttBroker
+ //   broker: mqttBroker
 });
 
 trackEmitter.connect();
