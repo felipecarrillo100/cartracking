@@ -69,12 +69,12 @@ Car positions are sent to:
 
 **Example (STOMP):**
 ```
-/topic/producers/cartracking/data/acme/car-1234
+/topic/producers/cartracking/data/avis/1234
 ```
 
 **MQTT Equivalent:**
 ```
-producers/cartracking/data/acme/car-1234
+producers/cartracking/data/avis/1234
 ```
 
 #### ✅ Message Format
@@ -85,13 +85,15 @@ producers/cartracking/data/acme/car-1234
     "type": "Point",
     "coordinates": [-74.006, 40.7128]
   },
-  "id": "car-1234",
+  "id": "1234",
   "properties": {
-    "carId": "car-1234",
-    "company": "acme",
-    "speed": 35.5,
-    "direction": 90,
-    "timestamp": 1672531200
+    "identifier": 47,
+    "company": "avis",
+    "name": "Rick Nicolas",
+    "email": "Rick.Nicolas24@gmail.com",
+    "country": "Sierra Leone",
+    "phone": "172-263-0075",
+    "heading": 83.72585690948058,
   }
 }
 ```
@@ -106,9 +108,17 @@ producers/cartracking/data/acme/car-1234
 }
 ```
 
-#### Topic Patterns
-- `/topic/producers/cars.data.avis.*`
-- `/topic/producers/cars.data.*.39`
+#### 📡 Topic Subscription Patterns
+
+You can subscribe to dynamic subsets of vehicle updates using topic wildcards:
+
+- `/topic/producers/cars.data.avis.*`  
+  → Subscribe to all cars belonging to the **Avis** company.
+
+- `/topic/producers/cars.data.*.39`  
+  → Subscribe to updates for **car ID 39**, regardless of which company it belongs to.
+
+These topic patterns allow flexible filtering when integrating with message brokers like **ActiveMQ** or **RabbitMQ** using STOMP wildcards.
 
 ---
 
