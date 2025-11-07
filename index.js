@@ -78,24 +78,24 @@ class TracksEmitter {
 // Samples were tested using our broker at: leu-gsp-vrndp06.ingrnet.com
 function createMqttBroker() {
     return new MessageProducerMQTT({
-        relayhost: "localhost", //  URL of your Broker (ActiveMQ, RabbitMQ or any other MQTT compliant Broker)
-        port: "1883",  //  Port of your Broker, in most cases 1883 for http and 8883 for SSL
-        username: "admin",  //  A valid user defined in your Broker capable to send messages  (see your Broker user guide to create the user)
-        password: "admin",  // Passsword for the user
+        relayhost: process.env.MQTT_HOST || "localhost", //  URL of your Broker (ActiveMQ, RabbitMQ or any other MQTT compliant Broker)
+        port: process.env.MQTT_PORT || "1883", //  Port of your Broker, in most cases 1883 for http and 8883 for SSL
+        username: process.env.MQTT_USER || "admin",  //  A valid user defined in your Broker capable to send messages  (see your Broker user guide to create the user)
+        password: process.env.MQTT_PASS || "admin", // Passsword for the user
     });
 }
 
 function createStompBroker() {
     return new MessageProducer({
-        relayhost: "localhost",  //  URL of your Broker (ActiveMQ, RabbitMQ or any other STOMP compliant Broker)
-        port: "61613",           //  Port of your Broker, in most cases 61613 for http and 61612 for SSL
-        username: "admin",   //  A valid user defined in your Broker capable to send to /topic/  (see your Broker user guide to create the user)
-        password: "admin",   //  Passsword for the user
-        topicSeparator: "."   // Some brokers use "/" by default, however it could be that your Broker is configured to use "." for STOMP protocol
+        relayhost: process.env.STOMP_HOST || "localhost", //  URL of your Broker (ActiveMQ, RabbitMQ or any other STOMP compliant Broker)
+        port: process.env.STOMP_PORT || "61613",  //  Port of your Broker, in most cases 61613 for http and 61612 for SSL
+        username: process.env.STOMP_USER || "admin",  //  A valid user defined in your Broker capable to send to /topic/  (see your Broker user guide to create the user)
+        password: process.env.STOMP_PASS || "admin",  //  Passsword for the user
+        topicSeparator: process.env.STOMP_TOPIC_SEPARATOR || ".",  // Some brokers use "/" by default, however it could be that your Broker is configured to use "." for STOMP protocol
     });
 }
 
-const protocol = process.argv[2] || "stomp";
+const protocol = (process.argv[2] || process.env.PROTOCOL || "stomp").toLowerCase();
 
 const broker = protocol === "mqtt" ? createMqttBroker() : createStompBroker();
 
