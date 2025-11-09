@@ -4,6 +4,7 @@ const path = require('path');
 const MessageProducer = require("./modules/MessageProducer");
 const MessageProducerMQTT = require("./modules/MessageProducerMQTT");
 const TracksFromTrajectories = require("./modules/TracksFromTrajectories");
+const {setupGracefulShutdown} = require("./modules/GracefulShutdown");
 
 class TracksEmitter {
     constructor(options) {
@@ -15,7 +16,7 @@ class TracksEmitter {
         this.targetBroker.init().then((producer)=>{
             if (producer == null) {
                 console.log("Exit: Failed to authenticate");
-                return;
+                process.exit(1); // Docker will restart
             } else {
                 console.error("Starting track generator");
                 console.error("Control+C to stop");
@@ -23,7 +24,7 @@ class TracksEmitter {
             }
         }, () =>{
             console.log("Exit: Failed to connect");
-            return;
+            process.exit(1); // Docker will restart
         });
     }
 
@@ -100,8 +101,13 @@ const protocol = (process.argv[2] || process.env.PROTOCOL || "stomp").toLowerCas
 const broker = protocol === "mqtt" ? createMqttBroker() : createStompBroker();
 
 const trackEmitter = new TracksEmitter({
-    broker: broker,
+    broker,
 });
 
+// Set clean shut down on Control+C
+setupGracefulShutdown(trackEmitter, broker);
+
+//  Start the transmission
 trackEmitter.connect();
+
 
