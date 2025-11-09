@@ -43,6 +43,7 @@ class TracksEmitter {
     }
 
     stopTrackGenerator() {
+        console.log("Stopped emitting tracks!")
         clearTimeout(this.timer);
         this.timer = null;
     }

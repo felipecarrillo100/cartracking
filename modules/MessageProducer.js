@@ -58,6 +58,31 @@ class MessageProducer {
             this.stompClient.send(correctedPath, {}, JSON.stringify(messageToPublish));
         }
     };
+
+    disconnect() {
+        return new Promise((resolve) => {
+            if (this.stompClient) {
+                try {
+                    this.stompClient.disconnect(() => {
+                        console.log("STOMP client disconnected.");
+                        this.stompClient = null;
+                        this.prospectSstompClient = null;
+                        this.counter = 0; // reset connection counter
+                        resolve();
+                    });
+                } catch (e) {
+                    console.warn("Error while disconnecting STOMP client:", e);
+                    this.stompClient = null;
+                    this.prospectSstompClient = null;
+                    this.counter = 0;
+                    resolve();
+                }
+            } else {
+                resolve();
+            }
+        });
+    }
+
 }
 
 module.exports = MessageProducer;

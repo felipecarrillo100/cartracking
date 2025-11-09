@@ -5,12 +5,12 @@ class MessageProducerMQTT {
     constructor(options) {
         options = options ? options : {};
         // Always use / for MQTT
-        options.topicSeparator = "/";  
+        options.topicSeparator = "/";
 
         this.mqttClient = null;
         this.relayhost = options.relayhost;
         this.port = options.port;
-        
+
         this.clientId = `mqtt_${Math.random().toString(16).slice(3)}`
         this.connectUrl = `mqtt://${this.relayhost}:${this.port}`
 
@@ -31,7 +31,7 @@ class MessageProducerMQTT {
     }
 
     connect(frame) {
-        console.log("MQTT client connected.");        
+        console.log("MQTT client connected.");
         if (this.counter++ == 0) this.firstResolve(this.mqttClient);
     }
 
@@ -48,7 +48,7 @@ class MessageProducerMQTT {
               });
 
               this.mqttClient.on("reconnect", () => {
-                console.log("Reconnecting...");                
+                console.log("Reconnecting...");
               });
 
               this.mqttClient.on('connect', () => {
@@ -70,10 +70,25 @@ class MessageProducerMQTT {
 
     sendMessage(path, messageToPublish) {
         if (this.mqttClient) {
-            const correctedPath = this.createPath(path);            
+            const correctedPath = this.createPath(path);
             this.mqttClient.publish(correctedPath,JSON.stringify(messageToPublish));
         }
     };
+
+    // ✅ Added disconnect method
+    disconnect() {
+        return new Promise((resolve) => {
+            if (this.mqttClient) {
+                this.mqttClient.end(false, () => {
+                    console.log("MQTT client disconnected.");
+                    this.mqttClient = null;
+                    resolve();
+                });
+            } else {
+                resolve();
+            }
+        });
+    }
 }
 
 module.exports = MessageProducerMQTT;
